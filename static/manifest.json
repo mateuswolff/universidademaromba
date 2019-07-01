@@ -1,0 +1,26 @@
+{
+  "short_name": "MES",
+  "name": "Aperam Manufacturing Execution System",
+  "icons": [
+    {
+      "src": "assets/logo_48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "assets/logo_96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "assets/logo_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#FFFFFF",
+  "theme_color": "#000000",
+  "display": "standalone",
+  "gcm_sender_id": "XXXXXX"
+}

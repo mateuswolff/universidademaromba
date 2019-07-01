@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/assets/lib/fa-all.css" type="text/css">
+  <script src="/assets/lib/webix/webix.min.js" type="text/javascript"></script>
+  <script src="/assets/lib/webix/skin.js" type="text/javascript"></script>
+  <link href="/assets/lib/webix/webix.css" rel="stylesheet" type="text/css">
+  <script src="/js/moment.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/@fortawesome/fontawesome-free/css/all.css" type="text/css" charset="utf-8">
+  <script src="/assets/lib/lodash.js" type="text/javascript"></script>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link href="/css/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/Treant.css" type="text/css" />
+  <link rel="stylesheet" href="/@mdi/font/css/materialdesignicons.css" type="text/css" charset="utf-8">
+  <script type="text/javascript" src="/instascan/index.js"></script>
+  <script type="text/javascript" src="/js/qrious.min.js"></script>
+  <script src="/js/moment.js" type="text/javascript"></script>
+  <script src="/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="/js/raphael.js"></script>
+
+  <!-- <link href="/cropperjs/dist/cropper.css" rel="stylesheet"> -->
+  <script src="/cropperjs/dist/cropper.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <![if gt IE 9]>
+  <script type="text/javascript" src="/js/shim.min.js"></script>
+  <script type="text/javascript" src="/js/xlsx.full.min.js"></script>
+
+  <script type="text/javascript" src="/js/Blob.js"></script>
+  <script type="text/javascript" src="/js/FileSaver.js"></script>
+  <![endif]>
+
+  <script> if (window.console && window.console.firebug) { alert("firebug desativado"); } </script>
+
+  <script src="/js/XmlBeautify.js" type="text/javascript"></script>
+</head>
+
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  .webix_header>div {
+    padding-left: 10px;
+    color: #ccc;
+    font-size: 20px;
+    text-align: center;
+    background: #6b1f7c;
+    line-height: 32px;
+    line-height: 34px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  #loading {
+    position: absolute;
+    margin: auto;
+    background-color: rgba(0, 0, 0, .2);
+    height: 100%;
+    width: 100%;
+    opacity: 20;
+    z-index: 9999;
+    display: none;
+  }
+
+  .load {
+    position: absolute;
+    z-index: 999999999 !important;
+    top: 50%;
+    /* posiciona na metade da tela */
+    margin-top: -25px;
+    /* e retrocede metade da altura */
+    left: 50%;
+    /* posiciona na metade da tela */
+    margin-left: -100px;
+    /* e retrocede metade da largura */
+  }
+
+  .table {
+    display: none;
+  }
+</style>
+
+<body id="body">
+  <script type="module" charset="utf-8">
+    import { App } from "/lib/App.js"; App.boot();
+  </script>
+
+  <div id="loading">
+    <div class="load"> <img src="/static/assets/loading.gif"> </div>
+  </div>
+
+
+</body>
+
+</html>

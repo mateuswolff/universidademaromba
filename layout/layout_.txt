@@ -1,0 +1,25 @@
+PP24,260:AN7
+BARSET "QRCODE",1,1,11,2,1
+PB "${idlot}"
+PP 270,265
+PT "${client}"
+PP 270,225
+PT "${lenght}"
+PP 270,185
+PT "${diameter}"
+PP 270,145
+PT "${thicknessOrWidth}"
+PP 270,105
+PT "${steel}"
+PP 270,65
+PT "${weight}"
+PP 550,145
+PT "${lot}"
+PP 550,105
+PT "${order}"
+PP 550,65
+FT "Swiss 721 BT",11
+PT "${date}"
+LAYOUT RUN ""
+PF
+PRINT KEY OFF
