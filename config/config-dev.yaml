@@ -1,0 +1,66 @@
+#Config file for server
+web:
+  port: 3000
+  security: false
+  publicurls:
+    - /$
+    - /index.html$
+    - /api/login$
+    - /api/logout$
+    - /webix.js$
+    - /webix_debug.js$
+    - /webix.css$
+    - /index.html$
+    - /createPassword/
+    - /Api.js$
+    - /api/config$
+    - /ngofw.js$
+    - /fa-all.css$
+    - /lodash.js$    
+    - /api/getCacheConfig$
+  staticmappings:
+    - root: /
+      folder: .
+    - root: /
+      folder: src/client
+    - root: /
+      folder: static
+    - root: /
+      folder: node_modules
+    - root: /
+      folder: img
+sequelize:
+  host: 'localhost'
+  port: 5432
+  user: 'postgres'
+  pass: '131289'
+  name: 'fitness'
+  dialect: 'postgres'
+  charset: 'utf8'
+  logging: false
+  force: false
+  alter: true
+  enabled: true
+  configWith: 'sequelize'
+  schema: 'public'
+extensions:
+  paths:
+client:
+  pushenabled: false
+  bootfile: 
+    - "/index.js"
+  app:
+    name : "MES - Aperam Manufacturing Execution System"
+authentication:
+  URL: 'LDAP://IP/DC=ACESITA,DC=COM,DC=BR'
+  base: 'DC=ACESITA,DC=COM,DC=BR'
+  domain: 'ACESITA.COM.BR'
+authenticationTubes:
+  URL: 'LDAP://IP/DC=AMIBTUBOS,DC=LOCAL'
+  base: 'DC=AMIBTUBOS,DC=LOCAL'
+  domain: 'AMIBTUBOS.LOCAL'
+ssl:
+  key: 'local onde a key se encontra'
+  crt: 'local onde a chave se encontra'
+storage:
+  img: '/'
