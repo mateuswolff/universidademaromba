@@ -27,67 +27,51 @@ class ApiImplApplet extends Applet.Applet {
         api.register('login', async (login, password, ctx) => {
 
             let item;
-            let { user, session, group } = config.postgres.DB;
+            let { usuario, session } = config.postgres.DB;
 
-            const crudRequestController = new CrudRequestController.crudRequestController(user);
-            const crudReqGroups = new CrudRequestController.crudRequestController(group);
+            const crudRequestController = new CrudRequestController.crudRequestController(usuario);
 
-            item = await crudRequestController.findOne({ user: login.toUpperCase() }, null);
+            ////alterar criptografia
+            item = await crudRequestController.findOne({ cpf: login.toUpperCase(), senha: password }, null);
             item = item.data;
 
             // Check user situation
-            if (item && item.situation == 'A') {
-                adConnect(this.app, login, password).then(async function (result) {
+            if (item && item.status) {
 
-                    if (result) {
-                        let userPerms = [];
+                let userPerms = [];
 
-                        if (item.groups != null) {
-                            let groups = item.groups.split(',');
-                            for (let group of groups) {
-                                if (group != "") {
-                                    let groupPerms = await crudReqGroups.findById(group);
-                                    if (groupPerms.data)
-                                        userPerms = userPerms.concat(groupPerms.data.perms);
-                                }
-                            }
-                        }
 
-                        // Remove duplicates items
-                        userPerms = Array.from(new Set(userPerms));
+                // Remove duplicates items
+                userPerms = Array.from(new Set(userPerms));
 
-                        let sessionSave = {};
-                        sessionSave.key = uuid.v4();
-                        sessionSave.login = login;
-                        sessionSave.permissions = {};
+                let sessionSave = {};
+                sessionSave.key = uuid.v4();
+                sessionSave.login = login;
+                sessionSave.nome = item.nome;
+                sessionSave.perfil = item.perfil;
+                sessionSave.permissions = {};
 
-                        // Get all serverside permissions
-                        sessionSave.permissions.serverside = [];
-                        sessionSave.permissions.serverside = await getAllPerms('actions', userPerms);
+                // Get all serverside permissions
+                sessionSave.permissions.serverside = [];
+                sessionSave.permissions.serverside = true;
+                //sessionSave.permissions.serverside = await getAllPerms('actions', userPerms);
 
-                        // Get all clienteside permissions
-                        sessionSave.permissions.clientside = [];
-                        sessionSave.permissions.clientside = await getAllPerms('objects', userPerms);
+                // Get all clienteside permissions
+                sessionSave.permissions.clientside = [];
+                sessionSave.permissions.clientside = true;
+                //sessionSave.permissions.clientside = await getAllPerms('objects', userPerms);
 
-                        const crudSessionRequestController = new CrudRequestController.crudRequestController(session);
-                        let saving = await crudSessionRequestController.create(sessionSave);
-                        saving = saving.data;
+                const crudSessionRequestController = new CrudRequestController.crudRequestController(session);
+                let saving = await crudSessionRequestController.create(sessionSave);
+                saving = saving.data;
 
-                        if (saving) {
-                            require('simple-git')().tags((err, tags) => {
-                                ctx.res.api.send({ key: sessionSave.key, version: tags.all[0], userName: result.Name }, 200, {}, null, sessionSave.key);
-                            });
-                        }
-                    }
-                    else {
-                        ctx.res.status(400).json({
-                            status: 'error',
-                            err: "Authentication Failed",
-                            message: result
-                        });
-                        return null;
-                    }
-                });
+                if (saving) {
+                    require('simple-git')().tags((err, tags) => {
+                        ctx.res.api.send({ key: sessionSave.key, version: tags.all[0], userName: sessionSave.nome }, 200, {}, null, sessionSave.key);
+                    });
+                }
+
+
             } else {
                 ctx.res.status(400).json({
                     status: 'error',
@@ -96,8 +80,8 @@ class ApiImplApplet extends Applet.Applet {
                 return null;
             }
         }, {
-                webpublic: true
-            });
+            webpublic: true
+        });
 
         api.register('logout', async (ctx) => {
             let key = ctx && ctx.req && ctx.req.cookies && ctx.req.cookies['X-SESSION'] ? ctx.req.cookies['X-SESSION'] : '';
@@ -124,8 +108,8 @@ class ApiImplApplet extends Applet.Applet {
                 });
             }
         }, {
-                public: true
-            });
+            public: true
+        });
 
         api.register('isloggedin', async (ctx) => {
             let key = ctx.req.cookies['X-SESSION'];
@@ -152,14 +136,14 @@ class ApiImplApplet extends Applet.Applet {
             }
 
         }, {
-                webpublic: true
-            });
+            webpublic: true
+        });
 
         api.register("getPermission", async (ctx) => {
             return ctx.permissions;
         }, {
-                public: true
-            });
+            public: true
+        });
 
         api.register("getAvailablePermissions", async (ctx) => {
             return await createPermsList();
@@ -172,8 +156,8 @@ class ApiImplApplet extends Applet.Applet {
         api.register("config", async (ctx) => {
             return this.app.config.client;
         }, {
-                webpublic: true
-            });
+            webpublic: true
+        });
 
         //#endregion
 
@@ -217,8 +201,8 @@ class ApiImplApplet extends Applet.Applet {
                 });
             }
         }, {
-                webpublic: true
-            });
+            webpublic: true
+        });
 
         api.register("loadI18nBundle", async (since, locale, ctx) => {
             const Op = config.postgres.sequelize.Op;
@@ -237,8 +221,8 @@ class ApiImplApplet extends Applet.Applet {
             ctx.res.status(200).json(res);
 
         }, {
-                webpublic: true
-            });
+            webpublic: true
+        });
         //#endregion
 
         //#region Integration
@@ -275,8 +259,8 @@ class ApiImplApplet extends Applet.Applet {
                 insert: contInsert, update: contUpdate
             });
         }, {
-                webpublic: true
-            });
+            webpublic: true
+        });
         //#endregion
     }
 }
@@ -492,9 +476,9 @@ async function createPermsList() {
     }
 
     let equipmenttypes = await equipmenttype.findAll({ where: { status: true }, raw: true });
-    
+
     for (let equipmenttype of equipmenttypes) {
-    
+
         let permission = { id: equipmenttype.id, title: equipmenttype.description, description: equipmenttype.description, data: [] };
 
         let equipments = await equipment.findAll({ where: { idtype: equipmenttype.id, status: true }, raw: true });
@@ -504,7 +488,7 @@ async function createPermsList() {
             let route = equipment.idtype + '.' + equipment.id;
 
             let equipmentMenu = createSpecificPerm(equipment.idtype, equipment.id, equipment.description, equipment.description);
-        
+
             equipmentMenu.data.push(createSpecificPerm(route, 'equipmentDetails', 'Details Equipment', 'Detail Equipment',
                 [],
                 ['btnEquipmentDetails'])
@@ -514,11 +498,11 @@ async function createPermsList() {
                 [],
                 ['btnProgramProduction'])
             );
-            
+
             permission.data.push(equipmentMenu);
 
         }
-        
+
         permissions.push(permission);
 
     }
@@ -533,10 +517,9 @@ function adConnect(app, login, password) {
         login = login.toUpperCase()
         console.log(login)
         console.log(login.substring(2, 0))
-        if(login.substring(2, 0) == 'AC' || 
-           login.substring(2, 0) == 'AX' ||
-           login.substring(2, 0) == 'AZ')
-        {
+        if (login.substring(2, 0) == 'AC' ||
+            login.substring(2, 0) == 'AX' ||
+            login.substring(2, 0) == 'AZ') {
             userReg = ldap.createClient({
                 url: app.config.authentication.URL
             });
@@ -553,10 +536,9 @@ function adConnect(app, login, password) {
             attributes: ['objectGUID', 'userAccountControl', 'cn']
         };
 
-        if(login.substring(2, 0) == 'AC' || 
-           login.substring(2, 0) == 'AX' ||
-           login.substring(2, 0) == 'AZ')
-        {
+        if (login.substring(2, 0) == 'AC' ||
+            login.substring(2, 0) == 'AX' ||
+            login.substring(2, 0) == 'AZ') {
             client.bind(login + '@' + app.config.authentication.domain, password, function (err) {
                 if (err) {
                     console.error(err);
@@ -567,7 +549,7 @@ function adConnect(app, login, password) {
                     client.search(app.config.authentication.base, opts, function (err, search) {
                         console.error(err)
                         search.on('searchEntry', function (entry) {
-                            
+
                             let control = entry.object.userAccountControl;
 
                             if (control == "514" || control == "66050" || control == "66082") {
@@ -587,8 +569,7 @@ function adConnect(app, login, password) {
                 }
             });
         }
-        else
-        {
+        else {
             client.bind(login + '@' + app.config.authenticationTubes.domain, password, function (err) {
                 if (err) {
                     console.error(err);
@@ -599,7 +580,7 @@ function adConnect(app, login, password) {
                     client.search(app.config.authenticationTubes.base, opts, function (err, search) {
                         console.error(err)
                         search.on('searchEntry', function (entry) {
-                            
+
                             let control = entry.object.userAccountControl;
 
                             if (control == "514" || control == "66050" || control == "66082") {
@@ -617,7 +598,7 @@ function adConnect(app, login, password) {
                         });
                     });
                 }
-            }); 
+            });
         }
     })
 }

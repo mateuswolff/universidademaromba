@@ -1,8 +1,0 @@
-apps:
-  - script      : src/server/index.js
-    name        : "MES-VIRACOPOS"
-    instances   : 1
-    exec_mode   : cluster
-    watch       : true
-    env         :
-      NODE_ENV  : config-viracopos

@@ -1195,4 +1195,15 @@ export class API {
         return Object.assign(object, labels);
     }
 
+
+    async ormDbRelatorioInadimplentes(filter = null) {
+        let route = 'relatorioInadimplentes' + (filter ? '?where=' + JSON.stringify(filter) : '');
+        return this.$invokeRoute('POST', route);
+    }
+
+    async ormDbRelatorioAdimplentes(filter = null) {
+        let route = 'relatorioAdimplentes' + (filter ? '?where=' + JSON.stringify(filter) : '');
+        return this.$invokeRoute('POST', route);
+    }
+
 }

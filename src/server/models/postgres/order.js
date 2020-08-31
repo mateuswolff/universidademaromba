@@ -92,7 +92,12 @@ exports.default = (sequelize, dataTypes) => {
         idequipmentscheduled: {
             type: dataTypes.STRING(200),
             allowNull: true
-        },   
+        },
+        yield: {
+            type: dataTypes.FLOAT,
+            allowNull: true,
+            required: false
+        }, 
         iduser: {
             type: dataTypes.STRING(200),
             allowNull: false,

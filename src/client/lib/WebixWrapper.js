@@ -600,6 +600,28 @@ export class WebixInputSelect {
     };
 }
 
+export class WebixInputMultiSelect {
+    constructor(name, label, data, opts = null) {
+        this.view = "multiselect";
+        this.label = label;
+        this.name = name;
+        this.id = opts && opts.id ? opts.id : "cmb" + name.charAt(0).toUpperCase() + name.slice(1);
+        this.labelPosition = opts && opts.labelPosition ? opts.labelPosition : "top";
+        this.options = {
+            body: {
+                template: opts && opts.template ? opts.template : "#value#",
+                data: data
+            }
+        };
+        this.on = {
+            onChange: opts && opts.onChange ? opts.onChange : () => { }
+        };
+        // this.onChange = opts && opts.onChange ? opts.onChange : () => { }
+        this.disabled = opts && opts.disabled ? opts.disabled : false;
+        this.value = opts && opts.value ? opts.value : ""
+    };
+}
+
 export class WebixInputMultiText {
     constructor(name, label, data, opts = null) {
         this.view = "multitext";

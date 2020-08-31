@@ -2,6 +2,7 @@ import { ls } from "../lib/LocalStorage.js";
 
 export async function checkClientPermission(page) {
 
+    return true
     // Get all user's permission
     let permissions = ls.getObj("permissions", {});
 

@@ -308,16 +308,16 @@ export class APP {
 
     addSimpleItem(parent, title, evt) {
 
-        // this.mainScreenFrame.addSimpleItem(parent, i18n(title), evt);
+        this.mainScreenFrame.addSimpleItem(parent, i18n(title), evt);
 
-        if (this.permissions.clientside.some(x => x.object.match(new RegExp(evt)) && x.enabled == true)){
-            if (this.permissions.clientside.some(x => x.object.match(new RegExp(parent)) && x.enabled == true)){
-                this.mainScreenFrame.addSimpleItem(parent, i18n(title), evt);
-            }
-            else{
-                this.mainScreenFrame.addSimpleItem("", i18n(title), evt);
-            }
-        }
+        // if (this.permissions.clientside.some(x => x.object.match(new RegExp(evt)) && x.enabled == true)){
+        //     if (this.permissions.clientside.some(x => x.object.match(new RegExp(parent)) && x.enabled == true)){
+        //         this.mainScreenFrame.addSimpleItem(parent, i18n(title), evt);
+        //     }
+        //     else{
+        //         this.mainScreenFrame.addSimpleItem("", i18n(title), evt);
+        //     }
+        // }
 
     }
 
@@ -814,76 +814,6 @@ export class APP {
                 }
             }
         }, {
-            id: "btnEnable",
-            icon: "fas fa-check",
-            label: "Enable",
-            click: async () => {
-                let grid = $$(datatable.id);
-                let item = grid.getSelectedItem();
-
-                if (item == null) {
-                    webix.message(i18n('An item must be selected'));
-                    return;
-                } else {
-                    if (opts && opts.reload) {
-                        await App.api.ormDbUpdate({
-                            id: item.newId,
-                            disposaltypesequence: item.sequenceView
-                        }, route, {
-                                status: true
-                            });
-                    } else {
-                        await App.api.ormDbUpdate({
-                            id: item.id
-                        }, route, {
-                                status: true
-                            });
-                    }
-                    webix.message(i18n('Item enabled successfully'));
-                    if (opts && opts.reload)
-                        opts.reload();
-                    else if (opts && opts.reloadDate)
-                        opts.reloadDate()
-                    else
-                        this.loadAllCrudData(route, datatable);
-                }
-            }
-        }, {
-            id: "btnDisable",
-            icon: "fas fa-minus",
-            label: "Disable",
-            click: async () => {
-                let grid = $$(datatable.id);
-                let item = grid.getSelectedItem();
-
-                if (item == null) {
-                    webix.message(i18n('An item must be selected'));
-                    return;
-                } else {
-                    if (opts && opts.reload && opts.dt) {
-                        await App.api.ormDbUpdate({
-                            id: item.newId,
-                            disposaltypesequence: item.sequenceView
-                        }, route, {
-                                status: false
-                            });
-                    } else {
-                        await App.api.ormDbUpdate({
-                            id: item.id
-                        }, route, {
-                                status: false
-                            });
-                    }
-                    webix.message(i18n('Item disabled successfully'));
-                    if (opts && opts.reload)
-                        opts.reload();
-                    else if (opts && opts.reloadDate)
-                        opts.reloadDate()
-                    else
-                        this.loadAllCrudData(route, datatable);
-                }
-            }
-        }, {
             id: "btnEdit",
             icon: "fas fa-edit",
             label: "Edit",
@@ -959,10 +889,19 @@ export class APP {
 
     createDefaultFormCrud(title, datatable, elements, rules, route, opts) {
         elements.push({
-            cols: [{
+            cols: [
+                {
+                    view: 'button',
+                    id: 'btnCancel',
+                    value: i18n('CANCELAR'),
+                    click: () => {
+                        modal.close();
+                    }
+                },
+                {
                 view: 'button',
                 id: 'btnConfirm',
-                value: i18n('Confirm'),
+                value: i18n('SALVAR'),
                 click: async () => {
 
                     let enabled = true;
@@ -1000,14 +939,7 @@ export class APP {
 
                 }
             },
-            {
-                view: 'button',
-                id: 'btnCancel',
-                value: i18n('Cancel'),
-                click: () => {
-                    modal.close();
-                }
-            }
+            
             ]
         });
 

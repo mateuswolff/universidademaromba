@@ -58,6 +58,11 @@ exports.default = (sequelize, dataTypes) => {
             type: dataTypes.FLOAT,
             allowNull: true
         },
+        yield: {
+            type: dataTypes.FLOAT,
+            allowNull: true,
+            required: false
+        }, 
         iduser: {
             type: dataTypes.STRING(200),
             allowNull: false,

@@ -25,13 +25,13 @@ export class LoginScreen {
             elements: [
                 {
                     view: "text",
-                    label: i18n("Login"),
+                    label: "CPF",
                     name: 'login'
                 },
                 {
                     view: "text",
                     type: "password",
-                    label: i18n("Password"),
+                    label: "Senha",
                     name: 'password'
                 },
                 {
@@ -52,10 +52,10 @@ export class LoginScreen {
                                         this.close();
                                         this.app.emit("login", o.login);
                                     } else {
-                                        webix.message({ text: i18n('Pass or user Invalid.') });
+                                        webix.message({ text: 'Usuário ou senha Inválidos' });
                                     }
                                 } else {
-                                    webix.message(i18n('Required fields are empty.'));
+                                    webix.message('Campos obrigatórios vazios');
                                     return;
                                 }
                             }
@@ -68,7 +68,7 @@ export class LoginScreen {
         let w = WebixWindow.showWindow({
             rows: [{
                     rows: [{},
-                        { minHeight: 200, borderless: true, template: "<img src='/assets/logo.png' style='height:200px;display:block;margin:auto; vertical-align: middle'>" },
+                        { width: 450, minHeight: 200, borderless: true, template: "<img src='/assets/logo.png' style='height:200px;display:block;margin:auto; vertical-align: middle'>" },
                         {}]
                 }, formConfig, {}]
         }, config.app.name + " - Login",{type: 'login'});

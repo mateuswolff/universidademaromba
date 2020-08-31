@@ -64,6 +64,11 @@ exports.default = (sequelize, dataTypes) => {
             type: dataTypes.BOOLEAN,
             allowNull: true,
             defaultValue: true
+        },
+        interface: {
+            type: dataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: true
         }
     },{
         createdAt: 'dtcreated',

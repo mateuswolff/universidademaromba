@@ -226,13 +226,10 @@ export class MainScreenFrame {
             id: 'sidetabbar',
             view: "tabbar", type: "bottom", multiview: true, options: [
                 {
-                    value: `<span class='webix_icon fas fa-info'></span><span style='padding-left: 4px'>${i18n("All")}</span>`,
+                    value: ``,
                     id: 'treeMenuWFilter'
-                },
-                {
-                    value: `<span class='webix_icon fas fa-star'></span><span style='padding-left: 4px'>${i18n("Favorites")}</span>`,
-                    id: 'listFavsWFilter'
                 }
+                
             ],
             height: 32,
             on: {
@@ -267,9 +264,9 @@ export class MainScreenFrame {
             view: "toolbar",
             height: 30,
             elements: [
-                { view: "button", type: "icon", icon: "copyright", label: "Aperam South America. Todos os direitos reservados", align: "center" },
+                { view: "button", type: "icon", icon: "copyright", label: "Universidade Maromba - Gestão de Academias", align: "center" },
                 {},
-                { view: "button", type: "icon", icon: "copyright", css: 'pull-right', label: localStorage.getItem('version') ? 'version ' + localStorage.getItem('version') : '0', align: "right" }
+                { view: "button", type: "icon", icon: "copyright", css: 'pull-right', label: "VERSÃO 1.0.0", align: "right" }
             ]
         };
 

@@ -34,7 +34,7 @@ sequelize:
   port: 5432
   user: 'postgres'
   pass: '131289'
-  name: 'fitness'
+  name: 'maromba'
   dialect: 'postgres'
   charset: 'utf8'
   logging: false
@@ -50,15 +50,7 @@ client:
   bootfile: 
     - "/index.js"
   app:
-    name : "MES - Aperam Manufacturing Execution System"
-authentication:
-  URL: 'LDAP://IP/DC=ACESITA,DC=COM,DC=BR'
-  base: 'DC=ACESITA,DC=COM,DC=BR'
-  domain: 'ACESITA.COM.BR'
-authenticationTubes:
-  URL: 'LDAP://IP/DC=AMIBTUBOS,DC=LOCAL'
-  base: 'DC=AMIBTUBOS,DC=LOCAL'
-  domain: 'AMIBTUBOS.LOCAL'
+    name : "UNIVERSIDADE MAROMBA - Gerenciamento de Academias"
 ssl:
   key: 'local onde a key se encontra'
   crt: 'local onde a chave se encontra'
