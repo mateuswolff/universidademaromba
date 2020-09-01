@@ -1,27 +1,25 @@
-# Introduction 
-aperam.afacs is the Aperam Facilities Access Control System.
+# Introdução 
+UNIVERSIDADE MAROMBA - Gestão de Academias
 
-In case further info is required please contact:
- - [Paulo Simão](mailto://paulo.simao@aperam.com)
- - [Carlos H B Esteves](mailto://carlos.esteves@aperam.com)
- - [Daniel Reis](mailto://daniel.reis@aperam.com)
- - [Renan Moraes](mailto://renan.moraes-partner@aperam.com)
+É o sistema desenvolvido para o trabalho de conclusão do curso de Engenharia de Software da Pontifícia Universidade Católica de Minas Gerais - PUC Minas pelo aluno Mateus Wolff de Almeida (mailto://mateus_wolff@hotmail.com)
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# Dependências
+1 - NodeJs 11.0.0 ou superior
+2 - NPM 6.10.0 ou superior
+3 - PostgreSQL 10 ou superior
+4 - Nginx 1.18.0
+5 - VS Code
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+# Começando
+1 - Clone a aplicação;
+2 - Faça o download do arquivo dump-universidade-maromba.backup.zip na aba Issue deste repositório e restaure no banco de dados
+3 - Instale as dependências do projeto via NPM
+4 - Execute o projeto utilizando o VS Code
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+# Credenciais de Acesso para teste
+CPF 12345678900
+SENHA 123
+
+
 
