@@ -321,7 +321,7 @@ export class MainScreenFrame {
                             rows: [
                                 {
                                     id: 'layoutMainMenu',
-                                    hidden: true,
+                                    hidden: false,
                                     borderless: true
                                 },
                                 mainContent

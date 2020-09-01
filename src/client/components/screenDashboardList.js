@@ -1,351 +1,78 @@
 import { App } from "../lib/App.js";
 import { i18n } from "../lib/I18n.js";
-
+import { WebixCrudDatatable, WebixInputText, WebixInputSelect, WebixInputNumber, WebixInputDate } from "../lib/WebixWrapper.js";
+import { optionsStatus } from "./optionsScreens.js";
 import * as util from "../lib/Util.js";
 
-import * as permission from '../control/permission.js';
+export async function showScreen() {
 
-export async function showScreen(event) {
+    let dtClientes = new WebixCrudDatatable("dtClientes");
 
-  
+    dtClientes.columns = [
+        { id: "id", header: [i18n("Matrícula"), { content: "textFilter" }], width: 100, sort: "string" },
+        { id: "nome", header: [i18n("Nome"), { content: "textFilter" }], sort: "string", fillspace: true },
+        { id: "celular", header: [i18n("Celular"), { content: "textFilter" }], sort: "string", fillspace: true },
+        { id: "email", header: [i18n("Email"), { content: "textFilter" }], sort: "string", fillspace: true },
+        { id: "datanascimento", header: [i18n("Aniversário"), { content: "textFilter" }], sort: "string", fillspace: true, template: (obj) => {
+            return moment(obj.datanascimento).format("DD/MM"); 
+        } },
+        
+    ];
 
 
-    let rows = [];
-    let numberColumns = 6;
+    let itens = [
+        { 
+            cols: [
+                new WebixInputText("id", "Matrícula", { disabled: true, width: 100 }),
+                new WebixInputText("nome", "Nome")
+            ]
+        },
+        {
+            cols: [
+                new WebixInputDate("datanascimento", "Data de Nascimento"),
+                new WebixInputNumber("rg", "RG"),
+                new WebixInputNumber("cpf", "CPF"),
+            ]
+        },
+        {
+            cols: [
+                new WebixInputNumber("cep", "CEP"),
+                new WebixInputText("logradouro", "Logradouro"),
+                new WebixInputNumber("numero", "Número", {width: 130}),
+                new WebixInputText("complemento", "Complemento"),
+            ]
+        },
+        { 
+            cols: [
+                new WebixInputText("bairro", "Bairro"),
+                new WebixInputText("cidade", "Cidade")
+            ]
+        },
+         { 
+            cols: [
+                new WebixInputNumber("telefone", "telefone"),
+                new WebixInputNumber("celular", "celular"),
+                new WebixInputText("email", "email"),
+            ]
+        },
 
-    var color = function (val) {
-        if (val < 2) return "red";
-        if (val < 4) return "orange";
-        return "green";
+    ];
+
+    let rules = {
+        
+        "nome": webix.rules.isNotEmpty,
+        "datanascimento": webix.rules.isNotEmpty,
+        "rg": webix.rules.isNotEmpty,
+        "cpf": webix.rules.isNotEmpty,
+        "cep": webix.rules.isNotEmpty,
+        "logradouro": webix.rules.isNotEmpty,
+        "numero": webix.rules.isNotEmpty,
+        "bairro": webix.rules.isNotEmpty,
+        "cidade": webix.rules.isNotEmpty,
+        "celular": webix.rules.isNotEmpty,
+        "email": webix.rules.isNotEmpty,
     };
 
-
-
-
-    function onMainMenuHide() {
-        if (!this.$submenuIds) return;
-        while (this.$submenuIds.length) {
-            var submenuId = this.$submenuIds.shift();
-            $$(submenuId).destructor();
-        }
-        this.destructor();
-    }
-
-    function onSubMenuShow() {
-        var topMenu = this.getTopMenu();
-        if (!topMenu.$submenuIds) topMenu.$submenuIds = [];
-        if (topMenu.$submenuIds.indexOf(this.config.id) === -1) {
-            topMenu.$submenuIds.push(this.config.id);
-        }
-    }
-
-    async function showMenu(ev, equipment) {
-
-        let menuDetails = await permission.checkObjectPermission(equipment.typeid + '.' + equipment.id + '.btnEquipmentDetails');
-        let menuProduction = await permission.checkObjectPermission(equipment.typeid + '.' + equipment.id + '.btnProgramProduction');
-
-        if (menuDetails || menuProduction) {
-
-            let menus = {
-                view: "contextmenu",
-                top: ev.clientY - 10,
-                left: ev.clientX - 10,
-                mouseEventDelay: 10,
-                data: [],
-                submenuConfig: {
-                    width: 270,
-                },
-                on: {
-                    onHide: onMainMenuHide,
-                    onMenuItemClick: function (id) {
-                        
-                    }
-                },
-                submenuConfig: {
-                    css: "submenu",
-                    on: {
-                        onShow: onSubMenuShow
-                    }
-                }
-            };
-
-            if (menuDetails) {
-                let menuD = {
-                    id: "btnEquipmentDetails",
-                    value: i18n('Equipment details')
-                };
-                menus.data.push(menuD);
-            }
-
-            if (menuProduction) {
-                let menuP = {
-                    id: "btnProgramProduction",
-                    value: i18n('Production program')
-                };
-                menus.data.push(menuP);
-            }
-
-            webix.ui(menus).show();
-        }
-
-    }
-
-    // for (let type of types) {
-
-    //     let newRow = {}, x = 0, y = 0;
-    //     let numberRows = Math.floor(type.data.length / numberColumns) + 1;
-
-    //     newRow.view = "dashboard";
-    //     newRow.padding = 0;
-    //     newRow.margin = 0;
-    //     //newRow.cellHeight = 200;
-    //     newRow.cells = [];
-    //     newRow.gridColumns = numberColumns;
-    //     newRow.gridRows = numberRows;
-
-    //     for (let equipment of type.data) {
-
-    //         let menuDetails = await permission.checkObjectPermission(equipment.typeid + '.' + equipment.id + '.btnEquipmentDetails');
-    //         let menuProduction = await permission.checkObjectPermission(equipment.typeid + '.' + equipment.id + '.btnProgramProduction');
-
-    //         if (menuDetails || menuProduction) {
-
-    //             let packagesProduced = 0;
-    //             let produced = 0;
-    //             let aproducing = 0;
-
-    //             // VERIFICO SE O TIPO DO EQUIPAMENTO É BMKT MKT SLT
-    //             if (equipment.typeid === "BMKT" || equipment.typeid === "MKT") {
-
-    //                 // PEGO A QUANTIDADE DE PACOTES A PRODUZIR
-    //                 let packagesToBeGenerated = await App.api.ormDbPackagesToBeGenerated({ equipment: equipment.id });
-    //                 packagesToBeGenerated = packagesToBeGenerated.data.length ? packagesToBeGenerated.data[0] : 0;
-
-    //                 // Verico se foi identificado quantos tudos deve ser produzido, caso nao ele assume o valor de zero para a produzir e produzido
-    //                 // isso acontesce para não da erro na execução
-    //                 if (packagesToBeGenerated && packagesToBeGenerated.package) {
-    //                     //PEGO TODOS OS PACOTES DE JA FORAM FECHADOS PARA AQUELA ORDEM
-    //                     packagesProduced = await App.api.ormDbFind('lotgenerated', { idorder: packagesToBeGenerated.idorder });
-    //                     produced = packagesProduced.data.length;
-
-    //                     //ARREDONDO PARA 1 CASA DESCIMAL ASCIMA DE QUANTOS PACOTES DEVEM SER PRODUZIDOS
-    //                     aproducing = Math.ceil(packagesToBeGenerated.package);
-    //                 };
-    //             }
-
-
-    //             if (equipment.typeid === "SLT") {
-    //                 // PEGA A ORDEM QUE ESTA PRODUZINDO PARA AQUELE EQUIPAMENTO
-    //                 let cuttingPlan = await App.api.ormDbPackagesToBeGeneratedCoilCutting({ idequipment: equipment.id });
-
-    //                 if (cuttingPlan.data.length) {
-    //                     aproducing = cuttingPlan.data[0].total;
-
-    //                     let packagesProduced = await App.api.ormDbFind('lotgenerated', { idorder: cuttingPlan.data[0].id });
-    //                     produced = packagesProduced.data.length;
-    //                 }
-    //             }
-
-
-    //             if (equipment.typeid === "POL") {
-    //                 // lot gerados / quantidade de pacotes alocados pela op pelo idorder * 100
-    //                 let allocationOrder = await App.api.ormDbFind('allocation', { idorder: equipment.idordermes });
-
-    //                 if (allocationOrder.data.length) {
-    //                     //aproducing = allocationOrder.data[0].pieces;
-    //                     aproducing = allocationOrder.data.length;
-                    
-    //                     packagesProduced = await App.api.ormDbFind('lotgenerated', { idorder: equipment.idordermes });
-    //                     produced = packagesProduced.data.length;
-    //                 }
-    //             }
-
-
-    //             if (equipment.typeid === "CUT") {
-    //                 if (equipment.idordermes) {
-    //                     let cutting = await App.api.ormDbPackagesProduceCutting({ idorder: equipment.idordermes });
-
-    //                     if (cutting.data && cutting.data.length) {
-    //                         aproducing = Math.ceil(cutting.data[0].quantity);
-
-    //                         packagesProduced = await App.api.ormDbFind('lotgenerated', { idorder: equipment.idordermes });
-    //                         produced = packagesProduced.data.length;
-    //                     }
-    //                 }
-
-    //             }
-    //             if(aproducing==0)
-    //                 aproducing = 1;
-
-    //             let percent = (produced * 100) / aproducing;
-    //             if (percent > 100)
-    //                 percent = 110;
-
-    //             let allProductionProgram = [];
-    //             let existsOrderSequenced = 0;
-    //             allProductionProgram = await App.api.ormDbTubesProductionSystem({ idequipment: equipment.id });
-    //             if (allProductionProgram.data.length > 0) {
-    //                 existsOrderSequenced = 1;
-    //             } else {
-    //                 existsOrderSequenced = 2;
-    //             }
-                
-    //             let bullet = {
-    //                 view: "bullet",
-    //                 minRange: 0,
-    //                 maxRange: 110,
-    //                 //value: (equipment.velocity_real == null) ? 0 : Math.round(equipment.velocity_real * 100) / 100,
-    //                 value: isNaN(percent) ? 0 : percent,
-    //                 bands: [
-    //                     {
-    //                         value: 110,
-    //                         color: (equipment.stoptype == null) ? "red" : "black"
-    //                     },
-    //                     {
-    //                         value: 100,
-    //                         color: (equipment.stoptype == null) ? "orange" : "black"
-    //                     }
-
-
-    //                 ],
-    //                 color: "white",
-    //                 scale: {
-    //                     step: 25,
-    //                     template: "#value#%"
-    //                 },
-    //                 barWidth: 18,
-    //                 height: 45
-    //             }
-
-    //             newRow.cells.push({
-    //                 view: "panel", x: x, y: y, dx: 1, dy: 1,
-    //                 //css:{'background-color':'red'},
-    //                 body: {
-    //                     rows: [
-    //                         {
-    //                             view: "button",
-    //                             label: equipment.description,
-    //                             click: function (btId, ev) {
-    //                                 showMenu(ev, equipment)
-    //                             },
-
-    //                         },
-    //                         existsOrderSequenced == 1 ? bullet : {},
-    //                         {
-    //                             hidden: equipment.stopreason ? false : true,
-    //                             view: "template",
-    //                             template: `<strong>${i18n('Reason')}: </strong> ${equipment.stopreason}`,
-
-    //                         },
-    //                         // {
-    //                         //     view: "gage",
-    //                         //     value: (equipment.velocity_real == null) ? 0 : Math.round(equipment.velocity_real * 100) / 100,
-    //                         //     minRange: 0,
-    //                         //     id: equipment.id,
-    //                         //     color: color,
-    //                         //     maxRange: (equipment.velocity_default == null) ? 1 : parseInt(equipment.velocity_default),
-    //                         //     placeholder: (equipment.stoptype == null) ? i18n("Running") : i18n("stopped")
-    //                         // }
-
-    //                     ]
-    //                 }
-    //             })
-
-    //             if (x == numberColumns - 1) {
-    //                 x = 0;
-    //                 y++;
-    //             }
-    //             else
-    //                 x++;
-
-    //         }
-
-    //     }
-
-    //     if (newRow.cells.length) {
-    //         rows.push(
-    //             {
-    //                 view: "toolbar", elements: [
-    //                     { view: "label", template: type.key }
-    //                 ]
-    //             }
-    //         )
-    //         rows.push(newRow);
-    //     }
-
-    // }
-
-    let rowsAlter = [];
-
-    let filterCharts = rows.filter(x => x.view == 'dashboard');
-    let filterHeader = rows.filter(x => x.view == 'toolbar');
-
-    for (let i = 0; i < filterCharts.length; i++) {
-
-        const element = filterCharts[i];
-        
-        if (element.cells.length < (numberColumns / 2)) {
-
-            if ((i + 1) < filterCharts.length && filterCharts[i + 1].cells.length < (numberColumns / 2)) {
-
-                let newItemColumnA = filterCharts[i];
-                let newItemColumnB = filterCharts[i + 1];
-
-                newItemColumnA.gridColumns = numberColumns / 2;
-                newItemColumnB.gridColumns = numberColumns / 2;
-
-                rowsAlter.push({
-                    cols: [
-                        {
-                            rows: [
-                                filterHeader[i],
-                                newItemColumnA
-                            ]
-                        },
-                        {
-                            rows: [
-                                filterHeader[i + 1],
-                                newItemColumnB
-                            ]
-                        }
-                    ]
-                })
-                i++;
-            }
-            else {
-                rowsAlter.push(filterHeader[i]);
-                rowsAlter.push(filterCharts[i]);
-            }
-        }
-        else {
-            rowsAlter.push(filterHeader[i]);
-            rowsAlter.push(filterCharts[i]);
-        }
-    }
-
-    let form = {
-        view: "scrollview", body: {
-            rows: rowsAlter
-        }
-    }
-
-    let intervs = setInterval(async function () {
-        let equipments = await App.api.getEquipmentSituation();
-        if (equipments.length) {
-            for (let equipment of equipments) {
-                if ($$(equipment.id)) {
-                    $$(equipment.id).setValue((equipment.velocity_real == null) ? 0 : Math.round(equipment.velocity_real * 100) / 100);
-                } else {
-                    clearInterval(intervs);
-                    break;
-                }
-            }
-        } else {
-            clearInterval(intervs);
-        }
-    }, 25000)
-
-    App.replaceMainContent(form);
-    App.replaceMainMenu({ hidden: true });
-
+    App.createDefaultFormCrud('Clientes', dtClientes, itens, rules, 'clientes');
+    App.replaceMainContent(dtClientes, async () => App.loadAllCrudData('clientes', dtClientes));
 }
