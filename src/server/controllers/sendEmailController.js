@@ -6,8 +6,8 @@ let moment = require('moment');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: 'sistema-evo@aperam.com',
-        pass: 'gfjhlgulyngfbjxg'
+        user: '',
+        pass: ''
     }
 });
 
@@ -21,7 +21,7 @@ class sendEmailController {
         try {
             const email = new Email({
                 message: {
-                    from: 'sistema-evo@aperam.com'
+                    from: ''
                 },
                 send: true,
                 preview: false,
