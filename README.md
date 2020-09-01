@@ -5,20 +5,28 @@ UNIVERSIDADE MAROMBA - Gestão de Academias
 
 # Dependências
 1 - NodeJs 11.0.0 ou superior
+
 2 - NPM 6.10.0 ou superior
+
 3 - PostgreSQL 10 ou superior
+
 4 - Nginx 1.18.0
+
 5 - VS Code
 
 # Começando
 1 - Clone a aplicação;
+
 2 - Faça o download do arquivo dump-universidade-maromba.backup.zip na aba Issue deste repositório e restaure no banco de dados
+
 3 - Instale as dependências do projeto via NPM
+
 4 - Execute o projeto utilizando o VS Code
 
 
 # Credenciais de Acesso para teste
 CPF 12345678900
+
 SENHA 123
 
 
